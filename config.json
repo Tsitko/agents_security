@@ -1,0 +1,139 @@
+{
+  "lm_studio": {
+    "base_url": "http://192.168.1.16:1234/v1",
+    "retry_attempts": 5,
+    "retry_delay_seconds": 3
+  },
+  "battle_settings": {
+    "max_turns": 10,
+    "attacker_params": {
+      "temperature": 0.9,
+      "top_p": 0.95,
+      "max_tokens": 1024
+    },
+    "defender_params": {
+      "temperature": 0.3,
+      "top_p": 0.9,
+      "max_tokens": 512
+    }
+  },
+  "experiments_per_pair": 10,
+  "model_categories": {
+    "small": [
+      "gigachat3-10b-a1.8b",
+      "qwen2.5-coder-7b-instruct-mlx",
+      "qwen3-vl-8b-instruct-mlx"
+    ],
+    "medium": [
+      "openai/gpt-oss-20b",
+      "qwen/qwen3-30b-a3b-2507",
+      "qwen3-coder-30b-a3b-instruct-mlx"
+    ],
+    "large": [
+      "qwen/qwen3-next-80b",
+      "qwen/qwen3-next-80b",
+      "openai/gpt-oss-120b"
+    ],
+    "coder": [
+      "qwen3-coder-30b-a3b-instruct-mlx"
+    ]
+  },
+  "model_pairs": [
+    {
+      "id": "pair_01",
+      "name": "small_vs_small_same",
+      "attacker": "qwen2.5-coder-7b-instruct-mlx",
+      "defender": "qwen2.5-coder-7b-instruct-mlx",
+      "can_run_parallel": true,
+      "description": "Одинаковые маленькие модели"
+    },
+    {
+      "id": "pair_02",
+      "name": "small_vs_small_different",
+      "attacker": "qwen2.5-coder-7b-instruct-mlx",
+      "defender": "gigachat3-10b-a1.8b",
+      "can_run_parallel": true,
+      "description": "Разные маленькие модели"
+    },
+    {
+      "id": "pair_03",
+      "name": "medium_vs_medium_same",
+      "attacker": "qwen/qwen3-30b-a3b-2507",
+      "defender": "qwen/qwen3-30b-a3b-2507",
+      "can_run_parallel": true,
+      "description": "Одинаковые средние MoE модели"
+    },
+    {
+      "id": "pair_04",
+      "name": "medium_vs_small",
+      "attacker": "openai/gpt-oss-20b",
+      "defender": "qwen2.5-coder-7b-instruct-mlx",
+      "can_run_parallel": true,
+      "description": "Средняя атакует маленькую"
+    },
+    {
+      "id": "pair_05",
+      "name": "small_vs_medium",
+      "attacker": "qwen2.5-coder-7b-instruct-mlx",
+      "defender": "openai/gpt-oss-20b",
+      "can_run_parallel": true,
+      "description": "Маленькая атакует среднюю"
+    },
+    {
+      "id": "pair_06",
+      "name": "coder_vs_small",
+      "attacker": "qwen3-coder-30b-a3b-instruct-mlx",
+      "defender": "qwen2.5-coder-7b-instruct-mlx",
+      "can_run_parallel": true,
+      "description": "Coder 30B MoE атакует маленькую"
+    },
+    {
+      "id": "pair_07",
+      "name": "small_vs_coder",
+      "attacker": "qwen2.5-coder-7b-instruct-mlx",
+      "defender": "qwen3-coder-30b-a3b-instruct-mlx",
+      "can_run_parallel": true,
+      "description": "Маленькая атакует Coder 30B MoE"
+    },
+    {
+      "id": "pair_08",
+      "name": "large_vs_small",
+      "attacker": "qwen/qwen3-next-80b",
+      "defender": "qwen2.5-coder-7b-instruct-mlx",
+      "can_run_parallel": false,
+      "description": "Большая атакует маленькую"
+    },
+    {
+      "id": "pair_09",
+      "name": "small_vs_large",
+      "attacker": "qwen2.5-coder-7b-instruct-mlx",
+      "defender": "qwen/qwen3-next-80b",
+      "can_run_parallel": false,
+      "description": "Маленькая атакует большую"
+    },
+    {
+      "id": "pair_10",
+      "name": "large_vs_large_same",
+      "attacker": "qwen/qwen3-next-80b",
+      "defender": "qwen/qwen3-next-80b",
+      "can_run_parallel": false,
+      "description": "Большая сама с собой"
+    },
+    {
+      "id": "pair_11",
+      "name": "coder_vs_coder",
+      "attacker": "qwen3-coder-30b-a3b-instruct-mlx",
+      "defender": "qwen3-coder-30b-a3b-instruct-mlx",
+      "can_run_parallel": true,
+      "description": "Coder 30B MoE сама с собой"
+    },
+    {
+      "id": "pair_12",
+      "name": "xlarge_vs_small",
+      "attacker": "openai/gpt-oss-120b",
+      "defender": "gigachat3-10b-a1.8b",
+      "can_run_parallel": false,
+      "description": "120B атакует 10B"
+    }
+  ]
+}

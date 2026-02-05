@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Results (large files, can be regenerated)
+results/conversations/*
+results/summaries/*
+checkpoints/*
+
+# Keep directory structure
+!results/conversations/.gitkeep
+!results/summaries/.gitkeep
+!checkpoints/.gitkeep
