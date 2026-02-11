@@ -113,6 +113,23 @@ python run.py run pair_01
 python run.py run pair_01 --dry-run
 ```
 
+### Phase 2 Testing (Improved Refusal Handling)
+```bash
+# Run with Phase 2 improvements (separate results directory)
+python run.py --phase2 run pair_01
+
+# Check Phase 2 status
+python run.py --phase2 status
+```
+
+Phase 2 includes:
+- Enhanced system prompts with explicit simulation context
+- Automatic refusal detection and retry logic
+- Null round handling for refused participations
+- Separate output directories (`results_2/`, `checkpoints_2/`)
+
+See [PHASE_2_TESTING.md](PHASE_2_TESTING.md) for detailed documentation.
+
 ---
 
 ## Results Structure

@@ -16,7 +16,15 @@ results/conversations/*
 results/summaries/*
 checkpoints/*
 
+# Phase 2 results (separate directory)
+results_2/conversations/*
+results_2/summaries/*
+checkpoints_2/*
+
 # Keep directory structure
 !results/conversations/.gitkeep
 !results/summaries/.gitkeep
 !checkpoints/.gitkeep
+!results_2/conversations/.gitkeep
+!results_2/summaries/.gitkeep
+!checkpoints_2/.gitkeep

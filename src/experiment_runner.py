@@ -13,7 +13,7 @@ from .battle_engine import BattleEngine, BattleLog, BattleResult
 
 @dataclass
 class ExperimentState:
-    """Состояние эксперимента для checkpoint."""
+    """Experiment state for checkpointing."""
     pair_id: str
     pair_name: str
     attacker_model: str
@@ -34,12 +34,20 @@ class ExperimentState:
 
 
 class ExperimentRunner:
-    """Запускает серии экспериментов с сохранением состояния."""
+    """Runs experiment series with state saving.
+    
+    Supports Phase 2 testing with separate output directories.
+    """
 
-    def __init__(self, config_path: str, results_dir: str = "results"):
+    def __init__(
+        self, 
+        config_path: str, 
+        results_dir: str = "results",
+        checkpoints_dir: str = "checkpoints"
+    ):
         self.config_path = Path(config_path)
         self.results_dir = Path(results_dir)
-        self.checkpoints_dir = Path("checkpoints")
+        self.checkpoints_dir = Path(checkpoints_dir)
 
         # Создаём директории
         self.results_dir.mkdir(parents=True, exist_ok=True)
@@ -97,16 +105,18 @@ class ExperimentRunner:
                 "status": "not_started",
                 "completed": 0,
                 "total": total,
-                "wins": {"attacker": 0, "defender": 0, "error": 0},
+                "wins": {"attacker": 0, "defender": 0, "refused": 0, "error": 0},
             }
 
-        wins = {"attacker": 0, "defender": 0, "error": 0}
+        wins = {"attacker": 0, "defender": 0, "refused": 0, "error": 0}
         for r in state.results:
             result = r.get("result", "")
             if result == "attacker_win":
                 wins["attacker"] += 1
             elif result in ["defender_win", "max_turns", "attacker_quit"]:
                 wins["defender"] += 1
+            elif result == "attacker_refused":
+                wins["refused"] += 1
             else:
                 wins["error"] += 1
 
@@ -268,18 +278,20 @@ class ExperimentRunner:
             print(f"    Attacker: {pair['attacker']}")
             print(f"    Defender: {pair['defender']}")
             print(f"    Parallel: {parallel} | {status['completed']}/{status['total']} "
-                  f"(A:{wins['attacker']} D:{wins['defender']} E:{wins['error']})")
+                  f"(A:{wins['attacker']} D:{wins['defender']} R:{wins['refused']} E:{wins['error']})")
 
         print("\n" + "=" * 80)
 
 
 def main():
-    """CLI интерфейс."""
+    """CLI interface."""
     import argparse
 
     parser = argparse.ArgumentParser(description="Agent Security Experiment Runner")
     parser.add_argument("--config", default="config.json", help="Path to config file")
     parser.add_argument("--results", default="results", help="Results directory")
+    parser.add_argument("--checkpoints", default="checkpoints", help="Checkpoints directory")
+    parser.add_argument("--phase2", action="store_true", help="Use Phase 2 directories (results_2, checkpoints_2)")
 
     subparsers = parser.add_subparsers(dest="command", help="Commands")
 
@@ -296,7 +308,14 @@ def main():
 
     args = parser.parse_args()
 
-    runner = ExperimentRunner(args.config, args.results)
+    # Use Phase 2 directories if specified
+    results_dir = args.results
+    checkpoints_dir = args.checkpoints
+    if args.phase2:
+        results_dir = "results_2"
+        checkpoints_dir = "checkpoints_2"
+
+    runner = ExperimentRunner(args.config, results_dir, checkpoints_dir)
 
     if args.command == "status":
         runner.print_status()
